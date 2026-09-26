@@ -52,6 +52,7 @@ function TestTab({ onNewResult }) {
   const [name, setName] = useState("");
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
+  const [statusMsg, setStatusMsg] = useState("");
 
   const mediaRecorderRef = useRef(null);
   const chunksRef = useRef([]);
@@ -59,6 +60,7 @@ function TestTab({ onNewResult }) {
   const audioCtxRef = useRef(null);
   const analyserRef = useRef(null);
   const rafRef = useRef(null);
+  const wakeupTimerRef = useRef(null);
 
   const draw = useCallback(() => {
     const canvas = canvasRef.current;
@@ -150,6 +152,17 @@ function TestTab({ onNewResult }) {
     if (!audioBlob) return;
     setPhase("analyzing");
     setError(null);
+    setStatusMsg("Analyzing your recording…");
+
+    // If the model service has been idle a while, the backend will be
+    // busy retrying it behind the scenes — that can take up to ~50s.
+    // Rather than let the button just sit there, tell the user what's
+    // happening after a few seconds so it doesn't look frozen/broken.
+    wakeupTimerRef.current = setTimeout(() => {
+      setStatusMsg(
+        "This is taking a little longer than usual — the model may be waking up after being idle. Hang tight, this can take up to a minute…",
+      );
+    }, 6000);
 
     const formData = new FormData();
     formData.append("file", audioBlob, "recording.webm");
@@ -158,6 +171,7 @@ function TestTab({ onNewResult }) {
     try {
       const response = await axios.post(`${BACKEND_URL}/predict`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
+        timeout: 120000, // must exceed the backend's own cold-start retry window
       });
       setResult(response.data);
       setPhase("done");
@@ -168,6 +182,9 @@ function TestTab({ onNewResult }) {
           "Something went wrong processing the recording.",
       );
       setPhase("ready");
+    } finally {
+      clearTimeout(wakeupTimerRef.current);
+      setStatusMsg("");
     }
   };
 
@@ -255,7 +272,7 @@ function TestTab({ onNewResult }) {
             </>
           )}
           {phase === "analyzing" && (
-            <p className="text-white/70 text-sm">Analyzing your recording…</p>
+            <p className="text-white/70 text-sm">{statusMsg}</p>
           )}
           {phase === "done" && (
             <button
