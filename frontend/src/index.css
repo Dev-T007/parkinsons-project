@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+@theme {
+  --font-display: "Space Grotesk", sans-serif;
+  --font-body: "IBM Plex Sans", sans-serif;
+  --color-ink: #101828;
+  --color-muted: #667085;
+  --color-bg: #f5f7fa;
+  --color-line: #e4e7ec;
+  --color-accent: #0f766e;
+  --color-accent-soft: #ccfbf1;
+  --color-panel: #0b1220;
+  --color-healthy: #059669;
+  --color-healthy-soft: #d1fae5;
+  --color-pd: #dc2626;
+  --color-pd-soft: #fee2e2;
+}
+
+body {
+  background-color: var(--color-bg);
+  font-family: var(--font-body);
+  color: var(--color-ink);
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-up {
+  animation: fade-up 0.35s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

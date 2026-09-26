@@ -1,0 +1,11 @@
+venv/
+__pycache__/
+*.pyc
+
+# Real voice recordings of actual people — privacy, don't commit
+*.wav
+real_test_recordings/
+data/mdvr-kcl/
+
+# Keep the extracted feature CSVs and the original UCI dataset (no privacy issue)
+!data/mdvr_kcl_features.csv
