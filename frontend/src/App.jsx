@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import axios from "axios";
 
-const BACKEND_URL = "http://localhost:5000/api";
+const BACKEND_URL = "https://backend-g8nx.onrender.com/api";
 const BAR_COUNT = 40;
 const BTN_TRANSITION = "transition-all duration-200 active:scale-[0.96]";
 
