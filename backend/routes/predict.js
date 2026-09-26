@@ -26,7 +26,7 @@ router.post("/predict", upload.single("file"), async (req, res) => {
     const modelResponse = await axios.post(
       `${MODEL_SERVICE_URL}/predict`,
       formData,
-      { headers: formData.getHeaders(), timeout: 30000 },
+      { headers: formData.getHeaders(), timeout: 120000 },
     );
 
     const result = modelResponse.data;
