@@ -1,7 +1,11 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import axios from "axios";
 
-const BACKEND_URL = "https://backend-g8nx.onrender.com/api";
+const BACKEND_URL =
+  import.meta.env.VITE_BACKEND_URL ||
+  (import.meta.env.DEV
+    ? "http://127.0.0.1:5000/api"
+    : "https://backend-g8nx.onrender.com/api");
 const BAR_COUNT = 40;
 const BTN_TRANSITION = "transition-all duration-200 active:scale-[0.96]";
 
@@ -59,7 +63,6 @@ function TestTab({ onNewResult }) {
   const canvasRef = useRef(null);
   const audioCtxRef = useRef(null);
   const analyserRef = useRef(null);
-  const rafRef = useRef(null);
   const wakeupTimerRef = useRef(null);
 
   const draw = useCallback(() => {
@@ -98,13 +101,16 @@ function TestTab({ onNewResult }) {
       ctx.fillStyle = phase === "recording" ? "#2dd4bf" : "#1e3a3a";
       ctx.fillRect(x, y, barWidth - gap, barHeight);
     });
-
-    rafRef.current = requestAnimationFrame(draw);
   }, [phase]);
 
   useEffect(() => {
-    rafRef.current = requestAnimationFrame(draw);
-    return () => cancelAnimationFrame(rafRef.current);
+    let frameId;
+    function renderFrame() {
+      draw();
+      frameId = requestAnimationFrame(renderFrame);
+    }
+    frameId = requestAnimationFrame(renderFrame);
+    return () => cancelAnimationFrame(frameId);
   }, [draw]);
 
   const startRecording = async () => {
@@ -120,7 +126,15 @@ function TestTab({ onNewResult }) {
       audioCtxRef.current = audioCtx;
       analyserRef.current = analyser;
 
-      const mediaRecorder = new MediaRecorder(stream);
+      const supportedMimeType = [
+        "audio/webm;codecs=opus",
+        "audio/webm",
+        "audio/mp4",
+      ].find((type) => MediaRecorder.isTypeSupported(type));
+      const mediaRecorder = new MediaRecorder(
+        stream,
+        supportedMimeType ? { mimeType: supportedMimeType } : undefined,
+      );
       mediaRecorderRef.current = mediaRecorder;
       chunksRef.current = [];
 
@@ -129,7 +143,9 @@ function TestTab({ onNewResult }) {
       };
 
       mediaRecorder.onstop = () => {
-        const blob = new Blob(chunksRef.current, { type: "audio/webm" });
+        const recordingType =
+          mediaRecorder.mimeType || chunksRef.current[0]?.type || "audio/webm";
+        const blob = new Blob(chunksRef.current, { type: recordingType });
         setAudioBlob(blob);
         setAudioUrl(URL.createObjectURL(blob));
         stream.getTracks().forEach((track) => track.stop());
@@ -139,7 +155,7 @@ function TestTab({ onNewResult }) {
 
       mediaRecorder.start();
       setPhase("recording");
-    } catch (err) {
+    } catch {
       setError(
         "Microphone access was blocked. Allow microphone permission and try again.",
       );
@@ -160,18 +176,23 @@ function TestTab({ onNewResult }) {
     // happening after a few seconds so it doesn't look frozen/broken.
     wakeupTimerRef.current = setTimeout(() => {
       setStatusMsg(
-        "This is taking a little longer than usual — the model may be waking up after being idle. Hang tight, this can take up to a minute…",
+        "This is taking longer than usual — the model may be waking up after being idle. Hang tight; it can take a few minutes…",
       );
     }, 6000);
 
     const formData = new FormData();
-    formData.append("file", audioBlob, "recording.webm");
+    const extension = audioBlob.type.includes("mp4")
+      ? "mp4"
+      : audioBlob.type.includes("ogg")
+        ? "ogg"
+        : "webm";
+    formData.append("file", audioBlob, `recording.${extension}`);
     formData.append("name", name || "Anonymous");
 
     try {
       const response = await axios.post(`${BACKEND_URL}/predict`, formData, {
         headers: { "Content-Type": "multipart/form-data" },
-        timeout: 120000, // must exceed the backend's own cold-start retry window
+        timeout: 360000, // covers five 60-second attempts plus retry delays
       });
       setResult(response.data);
       setPhase("done");
@@ -330,7 +351,7 @@ function HistoryTab({ refreshKey }) {
         const response = await axios.get(`${BACKEND_URL}/history`);
         setHistory(response.data);
         setError(null);
-      } catch (err) {
+      } catch {
         setError("Could not load recent tests.");
       } finally {
         setLoading(false);

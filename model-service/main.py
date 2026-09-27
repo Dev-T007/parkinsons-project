@@ -14,7 +14,6 @@ from feature_extraction import extract_all_features
 
 app = FastAPI(title="Parkinson's Voice Detection API")
 
-# Allow requests from your React dev server later
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # tighten this in production

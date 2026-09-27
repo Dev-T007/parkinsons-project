@@ -15,7 +15,7 @@ extract_module = import_module("01_extract_dataset")
 
 MODEL_DIR = "models"
 TEST_DIR = "real_test_recordings"
-KNOWN_HEALTHY = set()  # e.g. {"person1.wav", "person2.wav"}
+KNOWN_HEALTHY = set({"dev.wav", "dhruvesh.wav", "param.wav"})
 
 model = joblib.load(f"{MODEL_DIR}/mdvr_best_model.joblib")
 feature_cols = joblib.load(f"{MODEL_DIR}/mdvr_feature_columns.joblib")

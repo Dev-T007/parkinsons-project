@@ -17,7 +17,13 @@ const MODEL_SERVICE_URL =
 // it with a 502/503 immediately instead of waiting. So we retry a few
 // times with a short delay in between, which covers a full cold boot
 // without the user ever seeing an error.
-async function callModelService(formData, attempt = 1, maxAttempts = 5) {
+async function callModelService(file, attempt = 1, maxAttempts = 5) {
+  const formData = new FormData();
+  formData.append("file", file.buffer, {
+    filename: file.originalname || "recording.webm",
+    contentType: file.mimetype,
+  });
+
   try {
     return await axios.post(`${MODEL_SERVICE_URL}/predict`, formData, {
       headers: formData.getHeaders(),
@@ -32,7 +38,7 @@ async function callModelService(formData, attempt = 1, maxAttempts = 5) {
         `Model service not ready (attempt ${attempt}/${maxAttempts}, status ${status || "no response"}). Retrying in 10s...`,
       );
       await new Promise((resolve) => setTimeout(resolve, 10000));
-      return callModelService(formData, attempt + 1, maxAttempts);
+      return callModelService(file, attempt + 1, maxAttempts);
     }
     throw err;
   }
@@ -44,14 +50,7 @@ router.post("/predict", upload.single("file"), async (req, res) => {
       return res.status(400).json({ error: "No audio file uploaded." });
     }
 
-    // Forward the file to the FastAPI model service
-    const formData = new FormData();
-    formData.append("file", req.file.buffer, {
-      filename: req.file.originalname || "recording.webm",
-      contentType: req.file.mimetype,
-    });
-
-    const modelResponse = await callModelService(formData);
+    const modelResponse = await callModelService(req.file);
     const result = modelResponse.data;
 
     // Save to MongoDB
