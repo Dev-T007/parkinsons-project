@@ -14,8 +14,8 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.svm import SVC
 from sklearn.metrics import make_scorer, recall_score, precision_score, f1_score
 
-DATA_PATH = "data/mdvr_kcl_features.csv"
-OUT_DIR = "reports"
+DATA_PATH = "data/mdvr_kcl_chunks.csv"
+OUT_DIR = "reports2"
 os.makedirs(OUT_DIR, exist_ok=True)
 
 df = pd.read_csv(DATA_PATH)

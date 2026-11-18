@@ -7,8 +7,7 @@ const Prediction = require("../models/Prediction");
 const router = express.Router();
 const upload = multer({ storage: multer.memoryStorage() });
 
-const MODEL_SERVICE_URL =
-  process.env.MODEL_SERVICE_URL || "http://127.0.0.1:8000";
+const MODEL_SERVICE_URL = "http://127.0.0.1:8000" || process.env.MODEL_SERVICE_URL;
 
 // Render's free tier spins the model service down after ~15 min idle.
 // The first request after that has to cold-boot a fresh container

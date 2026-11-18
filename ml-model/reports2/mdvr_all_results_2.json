@@ -1,0 +1,45 @@
+{
+  "best_model": "SVM_RBF_tuned",
+  "person_level_results": {
+    "LogisticRegression": {
+      "accuracy": 0.6756756756756757,
+      "sensitivity_recall": 0.5625,
+      "specificity": 0.7619047619047619,
+      "precision": 0.6428571428571429,
+      "f1": 0.6,
+      "roc_auc": 0.6964285714285714
+    },
+    "SVM_RBF_tuned": {
+      "accuracy": 0.7297297297297297,
+      "sensitivity_recall": 0.5,
+      "specificity": 0.9047619047619048,
+      "precision": 0.8,
+      "f1": 0.6153846153846154,
+      "roc_auc": 0.8392857142857142
+    },
+    "RandomForest_tuned": {
+      "accuracy": 0.7027027027027027,
+      "sensitivity_recall": 0.6875,
+      "specificity": 0.7142857142857143,
+      "precision": 0.6470588235294118,
+      "f1": 0.6666666666666666,
+      "roc_auc": 0.8095238095238094
+    },
+    "XGBoost_tuned": {
+      "accuracy": 0.6756756756756757,
+      "sensitivity_recall": 0.5625,
+      "specificity": 0.7619047619047619,
+      "precision": 0.6428571428571429,
+      "f1": 0.6,
+      "roc_auc": 0.7678571428571429
+    },
+    "Ensemble_Voting": {
+      "accuracy": 0.7027027027027027,
+      "sensitivity_recall": 0.6875,
+      "specificity": 0.7142857142857143,
+      "precision": 0.6470588235294118,
+      "f1": 0.6666666666666666,
+      "roc_auc": 0.7857142857142857
+    }
+  }
+}

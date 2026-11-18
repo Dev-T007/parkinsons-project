@@ -19,8 +19,8 @@ from sklearn.metrics import make_scorer, recall_score, precision_score, f1_score
 from xgboost import XGBClassifier
 from scipy.stats import randint, uniform
 
-DATA_PATH = "data/mdvr_kcl_features.csv"
-OUT_DIR = "reports"
+DATA_PATH = "data/mdvr_kcl_chunks.csv"
+OUT_DIR = "reports2"
 MODEL_DIR = "models"
 os.makedirs(OUT_DIR, exist_ok=True)
 os.makedirs(MODEL_DIR, exist_ok=True)

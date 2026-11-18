@@ -22,9 +22,9 @@ function TopNav({ tab, setTab }) {
   ];
   return (
     <div className="sticky top-0 z-10 bg-white border-b border-line">
-      <div className="max-w-3xl mx-auto px-6 flex items-center justify-between h-16">
+      <div className="max-w-8xl mx-auto px-6 flex items-center justify-between h-16">
         <span className="font-display text-lg font-semibold tracking-tight">
-          Cadence
+          Voice-Based Parkinson’s Screening Tool
         </span>
         <div className="flex gap-1">
           {tabs.map((t) => (
@@ -178,7 +178,7 @@ function TestTab({ onNewResult }) {
       setStatusMsg(
         "This is taking longer than usual — the model may be waking up after being idle. Hang tight; it can take a few minutes…",
       );
-    }, 6000);
+    }, 10000);
 
     const formData = new FormData();
     const extension = audioBlob.type.includes("mp4")
@@ -476,10 +476,10 @@ function AboutTab() {
         </p>
         <div className="grid grid-cols-2 gap-4">
           {[
-            { label: "Accuracy", value: "78.9%" },
-            { label: "Sensitivity", value: "75.0%" },
-            { label: "Specificity", value: "80.0%" },
-            { label: "ROC-AUC", value: "0.817" },
+            { label: "Accuracy", value: "70.35%" },
+            { label: "Sensitivity", value: "61.66%" },
+            { label: "Specificity", value: "75.0%" },
+            { label: "ROC-AUC", value: "0.784" },
           ].map((m) => (
             <div key={m.label} className="border border-line rounded-lg p-4">
               <p className="font-display text-xl font-semibold">{m.value}</p>

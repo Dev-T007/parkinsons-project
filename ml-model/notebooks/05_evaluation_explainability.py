@@ -14,8 +14,8 @@ from sklearn.model_selection import StratifiedKFold, cross_val_predict
 from sklearn.metrics import confusion_matrix, classification_report
 import shap
 
-DATA_PATH = "data/mdvr_kcl_features.csv"
-OUT_DIR = "reports"
+DATA_PATH = "data/mdvr_kcl_chunks.csv"
+OUT_DIR = "reports2"
 MODEL_DIR = "models"
 
 df = pd.read_csv(DATA_PATH)

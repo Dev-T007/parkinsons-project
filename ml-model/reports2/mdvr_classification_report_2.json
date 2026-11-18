@@ -1,0 +1,29 @@
+{
+  "Healthy": {
+    "precision": 0.85,
+    "recall": 0.8095238095238095,
+    "f1-score": 0.8292682926829268,
+    "support": 21.0
+  },
+  "Parkinson's": {
+    "precision": 0.7647058823529411,
+    "recall": 0.8125,
+    "f1-score": 0.7878787878787878,
+    "support": 16.0
+  },
+  "accuracy": 0.8108108108108109,
+  "macro avg": {
+    "precision": 0.8073529411764706,
+    "recall": 0.8110119047619048,
+    "f1-score": 0.8085735402808574,
+    "support": 37.0
+  },
+  "weighted avg": {
+    "precision": 0.8131160572337042,
+    "recall": 0.8108108108108109,
+    "f1-score": 0.8113701284432991,
+    "support": 37.0
+  },
+  "roc_auc": 0.8392857142857142,
+  "threshold": 0.29
+}
