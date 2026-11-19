@@ -30,9 +30,9 @@ app.add_middleware(
 )
 
 MODEL_DIR = "model"
-model = joblib.load(os.path.join(MODEL_DIR, "mdvr_best_model_2.joblib"))
-feature_cols = joblib.load(os.path.join(MODEL_DIR, "mdvr_feature_columns_2.joblib"))
-THRESHOLD = float(joblib.load(os.path.join(MODEL_DIR, "mdvr_threshold_2.joblib")))
+model = joblib.load(os.path.join(MODEL_DIR, "mdvr_best_model_3.joblib"))
+feature_cols = joblib.load(os.path.join(MODEL_DIR, "mdvr_feature_columns_3.joblib"))
+THRESHOLD = float(joblib.load(os.path.join(MODEL_DIR, "mdvr_threshold_3.joblib")))
 
 MIN_DURATION_SEC = 8  # reject recordings too short to be meaningful
 CHUNK_SEC = 8.0       # must match 10_extract_chunks.py
